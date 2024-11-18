@@ -128,7 +128,10 @@
     ilast = index(outfile,' ') -1
     open(unit=filenumber,file=outfile(1:ilast)//".trwfn",status='unknown')
     open(unit=filenumber+1,file=outfile(1:ilast)//".pnwfn",status='unknown')
-	
+	 open(unit=filenumber+2,file=outfile(1:ilast)//".occ_basis",access='stream',&
+     form='unformatted', action='WRITE', status = 'unknown', err=102)
+102 continue
+
     ilast = index(intfilename,' ')-1
     write(filenumber,*)np(1)
     write(filenumber,*)np(2)
@@ -148,7 +151,7 @@
     end if
     write(filenumber,*)MaxWtot-minWtot,' ! Nmax (excitations) '
     write(filenumber,*)dimbasis,' ! # of many-body configurations '
-	write(filenumber+1,*)dimbasis,nxsd(1),nxsd(2)
+	 write(filenumber+1,*)dimbasis,nxsd(1),nxsd(2)
     write(filenumber,*)iparity,' ! parity '
     write(filenumber,*)jz, ' ! 2 x Jz '
     write(filenumber,*)nkeep,' ! # of eigenstates '
@@ -298,7 +301,18 @@
                          end do  ! i
 !---------------------------- WRITE OUT OCCUPIED STATES -----------------------
                          if(iproc==0) write(filenumber,2222)(pocc(i),i=1,np(1)),(nocc(i),i=1,np(2))
-2222                     format(10i5)
+2222                     format(40i5)
+                         ! Added 
+                         do i=1,np(1)
+                           write(6,*) 'pocc(i)', pocc(i)
+                           call wfn_write_int4(filenumber+2, pocc(i))
+                         end do
+                         do i=1,np(2)
+                           write(6,*) 'nocc(i)',nocc(i)
+                           call wfn_write_int4(filenumber+2, nocc(i))
+                         end do
+                         ! End Added
+                         !if(iproc==0) write(filenumber+2)(pocc(i),i=1,np(1)),(nocc(i),i=1,np(2))
 !------------------------------- LOOP OVER WFNS -------------------------
 !                         do i = 1,nkeep
 !                            call br_retrieve_hist(i)
@@ -315,7 +329,16 @@
 								 write(filenumber,3333)(vamp(i),i=1,nkeep)
 	                             write(filenumber+1,*)ip,in
 								 write(filenumber+1,3333)(vamp(i),i=1,nkeep)
-								 
+								 ! Added
+                         write(filenumber+1,3333)(vamp(i),i=1,nkeep)
+
+                         do i=1,nkeep
+                           write(6,*) 'vamp(i)', (vamp(i))
+                          call wfn_write_real4(filenumber+2, vamp(i))
+                         end do
+                         ! End Added
+                         !if(iproc==0) write(filenumber+2) vamp
+
 								 
 							 end if
                           end if
@@ -611,6 +634,7 @@ xsd(1)%sector(ps)%jzX,', parity ',paritychar,', W = ', xsd(1)%sector(ps)%wX
 
 !---------------------------- WRITE OUT OCCUPIED STATES -----------------------
                           write(basis_file,2222)ibasis,ip,in,(pocc(i),i=1,np(1)),(nocc(i),i=1,np(2))
+                          write(6,*) ibasis,ip,in,(pocc(i),i=1,np(1)),(nocc(i),i=1,np(2))
 2222  format('State:',i8,', pSD:',i6,', nSD:',i6,' Occupied:',10i4)
 
 
@@ -818,9 +842,13 @@ end subroutine write_out_basis
 !  write(  xsd_file,*)'       label          n          l          2j           2m     '
  ith = -1
 ! print*,' testing output ',nhsps
+ write(6,*) 'nhsps',nhsps
+ write(6,*) 'nhsps(-2) nhsps(-1) nhsps(1) nhsps(2)',nhsps(-2),nhsps(-1),nhsps(1),nhsps(2)
  write(wfnfile)nhsps    ! MODIFIED IN 7.8.4---write all out at once
  do i = 1,nhsps(ith)  ! left states
    nstate = nstate + 1
+   write(6,*)'loop1: ',nstate,hspsqn(ith,i)%nr,hspsqn(ith,i)%l,hspsqn(ith,i)%j, & 
+   hspsqn(ith,i)%m,hspsqn(ith,i)%w
    write(wfnfile)nstate,hspsqn(ith,i)%nr,hspsqn(ith,i)%l,hspsqn(ith,i)%j, & 
    hspsqn(ith,i)%m,hspsqn(ith,i)%w
 
@@ -828,8 +856,12 @@ end subroutine write_out_basis
  
  ith = 1
 ! write(wfnfile)nhsps(ith)
+write(6,*) 'do i = 1,nhsps(ith)  ! right states'
  do i = 1,nhsps(ith)  ! right states
    nstate = nstate + 1
+   write(6,*) i,nhsps(ith)
+   write(6,*)nstate,hspsqn(ith,i)%nr,hspsqn(ith,i)%l,hspsqn(ith,i)%j, & 
+                             hspsqn(ith,i)%m,hspsqn(ith,i)%w
    write(wfnfile)nstate,hspsqn(ith,i)%nr,hspsqn(ith,i)%l,hspsqn(ith,i)%j, & 
                              hspsqn(ith,i)%m,hspsqn(ith,i)%w
  enddo  ! i
@@ -840,16 +872,24 @@ end subroutine write_out_basis
 !  write(  xsd_file,*)'       label          n          l          2j           2m     '
  ith = -2
 ! write(wfnfile)nhsps(ith)
+write(6,*) ' do i = 1,nhsps(ith)  ! left states'
  do i = 1,nhsps(ith)  ! left states
    nstate = nstate + 1
+   write(6,*) i,nhsps(ith)
+   write(6,*)nstate,hspsqn(ith,i)%nr,hspsqn(ith,i)%l,hspsqn(ith,i)%j, & 
+                             hspsqn(ith,i)%m,hspsqn(ith,i)%w
    write(wfnfile)nstate,hspsqn(ith,i)%nr,hspsqn(ith,i)%l,hspsqn(ith,i)%j, & 
                              hspsqn(ith,i)%m,hspsqn(ith,i)%w
  enddo  ! i
  
  ith = 2
 ! write(wfnfile)nhsps(ith)
+write(6,*) 'do i = 1,nhsps(ith)'
  do i = 1,nhsps(ith)  ! right states
    nstate = nstate + 1
+   write(6,*) i,nhsps(ith)
+   write(6,*)nstate,hspsqn(ith,i)%nr,hspsqn(ith,i)%l,hspsqn(ith,i)%j, & 
+                             hspsqn(ith,i)%m,hspsqn(ith,i)%w
    write(wfnfile)nstate,hspsqn(ith,i)%nr,hspsqn(ith,i)%l,hspsqn(ith,i)%j, & 
                              hspsqn(ith,i)%m,hspsqn(ith,i)%w
  enddo  ! i
@@ -857,14 +897,19 @@ end subroutine write_out_basis
 
 
 !.................................. NOW WRITE OUT PROTON, NEUTRON SLATER DETERMINANTS.....
+write(6,*)'nsectors(1),nxSD(1)',nsectors(1),nxSD(1)
 write(wfnfile)nsectors(1),nxSD(1)
  do ps = 1,nsectors(1)  ! loop over proton sectors
-    write(wfnfile)ps,xsd(1)%sector(ps)%jzX,xsd(1)%sector(ps)%parX,xsd(1)%sector(ps)%Wx
+   write(wfnfile)ps,xsd(1)%sector(ps)%jzX,xsd(1)%sector(ps)%parX,xsd(1)%sector(ps)%Wx
 	write(wfnfile)xsd(1)%sector(ps)%xsdstart,xsd(1)%sector(ps)%xsdend,xsd(1)%sector(ps)%nxsd
 	write(wfnfile)xsd(1)%sector(ps)%ncsectors
 	write(wfnfile)(xsd(1)%sector(ps)%csector(i),i=1,xsd(1)%sector(ps)%ncsectors)
 	write(wfnfile)xsd(1)%sector(ps)%basisstart,xsd(1)%sector(ps)%basisend
-
+   write(6,*)ps,xsd(1)%sector(ps)%jzX,xsd(1)%sector(ps)%parX,xsd(1)%sector(ps)%Wx
+	write(6,*)xsd(1)%sector(ps)%xsdstart,xsd(1)%sector(ps)%xsdend,xsd(1)%sector(ps)%nxsd
+	write(6,*)xsd(1)%sector(ps)%ncsectors
+	write(6,*)(xsd(1)%sector(ps)%csector(i),i=1,xsd(1)%sector(ps)%ncsectors)
+	write(6,*)xsd(1)%sector(ps)%basisstart,xsd(1)%sector(ps)%basisend
 !--------------- construct proton part
        do pblock = 1,xsd(1)%sector(ps)%nhblocks
           prblock = xsd(1)%sector(ps)%rhblock(pblock)

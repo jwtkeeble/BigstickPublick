@@ -47,7 +47,7 @@ module verbosity
 
   logical :: print_genes       = .false.
   integer :: gene_file         = 38
-  logical :: print_basis       = .false.
+  logical :: print_basis       = .true.
   integer :: basis_file        = 31
 
   logical :: print_matrix      = .false.

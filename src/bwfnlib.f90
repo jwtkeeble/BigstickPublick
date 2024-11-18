@@ -781,6 +781,24 @@ end subroutine wfn_read_nkeep
 
 !===========================================================================
 
+! Added
+subroutine wfn_write_real4(fn, v)
+   implicit none
+   integer, intent(in) :: fn
+   real(kind=4), intent(in) :: v
+   integer :: status(MPI_STATUS_SIZE)
+   integer :: ierr
+   real(kind=4) :: data4
+
+   data4 = v
+   if(wfn_mpiio) then
+      call wfn_checkmpiio()
+      call BMPI_FILE_WRITE(fn, data4, 1, status, ierr)
+   else
+      write(fn) data4
+   end if 
+end subroutine wfn_write_real4
+
 !
 ! Write one integer to the wfn file. 
 ! 

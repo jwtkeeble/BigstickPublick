@@ -1,0 +1,12 @@
+*.trwfn
+*.wfn
+*.bas
+*.lcoef
+*.log
+*.res
+*.bigstick
+*.py
+python/dump/
+fort.*
+*.o
+*.mod
