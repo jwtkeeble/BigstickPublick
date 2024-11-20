@@ -1,11 +1,13 @@
 import argparse 
 
 parser = argparse.ArgumentParser(prog='read binary file', description='')
-parser.add_argument('-N','--nucleus',default='6Be',type=str,help='Nucleus')
-parser.add_argument('-K','--nkeep',default=1,type=int,help='number of eigenstates in file')
-
+parser.add_argument('-N', '--nucleus', default='6Be', type=str, help='Nucleus')
+parser.add_argument('-Q', '--nqubits', default=6,     type=int, help='Number of Qubits to be expected in the .btrwfn file')
+parser.add_argument('-K', '--nkeep',   default=1,     type=int, help='Number of Eigenstates to be expected in the .btrwfn file')
 args=parser.parse_args()
+
 nucleus = args.nucleus
+nqubits = args.nqubits
 nkeep = args.nkeep
 
 import struct
@@ -17,7 +19,7 @@ def read_btyes(record_format, f):
     record = f.read(record_size)
     return struct.unpack(record_format, record)
 
-record_format = "i"*12 + "f"*nkeep  # num qubits + num eigenstates
+record_format = "i"*nqubits + "f"*nkeep  # num qubits + num eigenstates
 record_size = struct.calcsize(record_format)
 
 filename = f"../outputs/{nucleus}.btrwfn"
