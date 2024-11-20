@@ -1,4 +1,6 @@
 *.trwfn
+*.pnwfn
+*.x
 *.wfn
 *.bas
 *.lcoef
@@ -10,3 +12,5 @@ python/dump/
 fort.*
 *.o
 *.mod
+inputs/*
+outputs/*

@@ -128,8 +128,8 @@
     ilast = index(outfile,' ') -1
     open(unit=filenumber,file=outfile(1:ilast)//".trwfn",status='unknown')
     open(unit=filenumber+1,file=outfile(1:ilast)//".pnwfn",status='unknown')
-	 open(unit=filenumber+2,file=outfile(1:ilast)//".occ_basis",access='stream',&
-     form='unformatted', action='WRITE', status = 'unknown', err=102)
+	 open(unit=filenumber+2,file=outfile(1:ilast)//".btrwfn",access='stream',&
+     form='unformatted', action='WRITE', status = 'unknown', err=102) ! binary equivalent of .trwfn (more efficient)
 102 continue
 
     ilast = index(intfilename,' ')-1
@@ -304,11 +304,11 @@
 2222                     format(40i5)
                          ! Added 
                          do i=1,np(1)
-                           write(6,*) 'pocc(i)', pocc(i)
+                           !write(6,*) 'pocc(i)', pocc(i)
                            call wfn_write_int4(filenumber+2, pocc(i))
                          end do
                          do i=1,np(2)
-                           write(6,*) 'nocc(i)',nocc(i)
+                           !write(6,*) 'nocc(i)',nocc(i)
                            call wfn_write_int4(filenumber+2, nocc(i))
                          end do
                          ! End Added
@@ -333,7 +333,7 @@
                          write(filenumber+1,3333)(vamp(i),i=1,nkeep)
 
                          do i=1,nkeep
-                           write(6,*) 'vamp(i)', (vamp(i))
+                           !write(6,*) 'vamp(i)', (vamp(i))
                           call wfn_write_real4(filenumber+2, vamp(i))
                          end do
                          ! End Added
