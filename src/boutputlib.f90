@@ -301,7 +301,7 @@
                          end do  ! i
 !---------------------------- WRITE OUT OCCUPIED STATES -----------------------
                          if(iproc==0) write(filenumber,2222)(pocc(i),i=1,np(1)),(nocc(i),i=1,np(2))
-2222                     format(40i5)
+2222                     format(10i5)
                          ! Added 
                          do i=1,np(1)
                            !write(6,*) 'pocc(i)', pocc(i)
@@ -326,7 +326,7 @@
 						  
                           if(storelanczosincore1)then
                              if(iproc==0)then
-								 write(filenumber,3333)(vamp(i),i=1,nkeep)
+								 !write(filenumber,3333)(vamp(i),i=1,nkeep)
 	                             write(filenumber+1,*)ip,in
 								 write(filenumber+1,3333)(vamp(i),i=1,nkeep)
 								 ! Added

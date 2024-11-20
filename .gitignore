@@ -1,3 +1,4 @@
+# Files
 *.trwfn
 *.pnwfn
 *.x
@@ -9,9 +10,11 @@
 *.bigstick
 *.py
 *.npz
-python/dump/
 fort.*
 *.o
 *.mod
+
+# Folders
+python/dump/
 inputs/*
 outputs/*
