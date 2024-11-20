@@ -8,6 +8,7 @@
 *.res
 *.bigstick
 *.py
+*.npz
 python/dump/
 fort.*
 *.o
