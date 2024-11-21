@@ -9,17 +9,17 @@ def create_bigstick_file(N: int,Z: int) -> str:
     input_file = f'input_{iso}.bigstick'
     Jz2 = 0 if A%2==0 else 1
     with open(input_file, "w") as f:
-        f.write('t         ! menu choice ')
-        f.write(f'{iso}')
-        f.write('pf        !  name of .sps file ')
-        f.write(f'{Z} {N}  ! # of valence protons, neutrons ')
-        f.write(f'{Jz2}    ! 2 x Jz of systems ')
-        f.write('0         !  LANCZOS FRAGMENT SIZE (0 = use default)')
-        f.write('kb3g                        ')
-        f.write('end                         ')
-        f.write('ld    ! Lanczos menu option ')
-        f.write('1 100 ! # states to keep, max # iterations ')
-        f.write(' ! Not optimizing initial pivot vector ')
+        f.write('t         ! menu choice \n')
+        f.write(f'{iso}\n')
+        f.write('pf        !  name of .sps file \n')
+        f.write(f'{Z} {N}  ! # of valence protons, neutrons \n')
+        f.write(f'{Jz2}    ! 2 x Jz of systems \n')
+        f.write('0         !  LANCZOS FRAGMENT SIZE (0 = use default)\n')
+        f.write('kb3g                        \n')
+        f.write('end                         \n')
+        f.write('ld    ! Lanczos menu option \n')
+        f.write('1 100 ! # states to keep, max # iterations \n')
+        f.write(' ! Not optimizing initial pivot vector')
     return input_file
 
 for Z in range(20,40,1):

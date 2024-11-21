@@ -8,4 +8,16 @@ Z_to_nuc={0:'n',1:'H',2:'He',3:'Li',4:'Be',5:'B',6:'C',7:'N',8:'O',9:'F',10:'Ne'
 
 Z_to_nuc = bidict(Z_to_nuc)
 
-print(Z_to_nuc[32], Z_to_nuc.inverse['Ge'])
+import re
+
+def get_A_and_symbol(s: str) -> str:
+    match = re.match(r"(\d+)(\D+)", s)
+    if match:
+        A = match.group(1)
+        sym = match.group(2)
+        return int(A), sym
+    raise ValueError("Invalid string")
+
+
+#print(Z_to_nuc[32], Z_to_nuc.inverse['Ge'])
+#print(get_A_and_symbol('30Ge'))

@@ -326,11 +326,11 @@
 						  
                           if(storelanczosincore1)then
                              if(iproc==0)then
-								 !write(filenumber,3333)(vamp(i),i=1,nkeep)
+								        write(filenumber,3333)(vamp(i),i=1,nkeep)
 	                             write(filenumber+1,*)ip,in
 								 write(filenumber+1,3333)(vamp(i),i=1,nkeep)
 								 ! Added
-                         write(filenumber+1,3333)(vamp(i),i=1,nkeep)
+                         !write(filenumber+1,3333)(vamp(i),i=1,nkeep)
 
                          do i=1,nkeep
                            !write(6,*) 'vamp(i)', (vamp(i))

@@ -15,8 +15,8 @@ fort.*
 *.o
 *.mod
 *.dat
+*.btrwfn.npz
 
 # Folders
-python/dump/
 inputs/*
 outputs/*
