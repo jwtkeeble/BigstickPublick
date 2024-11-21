@@ -7,12 +7,19 @@ def create_bigstick_file(N: int,Z: int) -> str:
     sym = Z_to_nuc[Z]
     iso = f'{A}{sym}'
     input_file = f'input_{iso}.bigstick'
+    
+    NNcore=20
+    ZZcore=20
+    
+    Zval = Z-ZZcore if (Z != 40) else 0
+    Nval = N-NNcore if (N != 40) else 0
+    
     Jz2 = 0 if A%2==0 else 1
     with open(input_file, "w") as f:
         f.write('t         ! menu choice \n')
         f.write(f'{iso}\n')
         f.write('pf        !  name of .sps file \n')
-        f.write(f'{Z} {N}  ! # of valence protons, neutrons \n')
+        f.write(f'{Zval} {Nval}  ! # of valence protons, neutrons \n')
         f.write(f'{Jz2}    ! 2 x Jz of systems \n')
         f.write('0         !  LANCZOS FRAGMENT SIZE (0 = use default)\n')
         f.write('kb3g                        \n')
