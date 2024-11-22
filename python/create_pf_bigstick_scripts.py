@@ -13,11 +13,11 @@ def create_bigstick_file(N: int,Z: int) -> str:
     
     Zval = Z-ZZcore if (Z != 40) else 0
     Nval = N-NNcore if (N != 40) else 0
-    
+
     Jz2 = 0 if A%2==0 else 1
     with open(input_file, "w") as f:
         f.write('t         ! menu choice \n')
-        f.write(f'{iso}\n')
+        f.write(f'outputs/{iso}\n')
         f.write('pf        !  name of .sps file \n')
         f.write(f'{Zval} {Nval}  ! # of valence protons, neutrons \n')
         f.write(f'{Jz2}    ! 2 x Jz of systems \n')

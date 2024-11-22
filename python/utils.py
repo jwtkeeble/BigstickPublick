@@ -18,6 +18,25 @@ def get_A_and_symbol(s: str) -> str:
         return int(A), sym
     raise ValueError("Invalid string")
 
+from typing import Tuple
+
+def get_valence_and_core(x: int) -> Tuple[int]:
+    if(x<2): # s-shell
+        core=0
+        valence = x - core if (x != 2) else 0
+    elif(x<8): # p-shell
+        core=2
+        valence = x - core if (x != 8) else 0
+    elif(x<20): # sd-shell
+        core=8
+        valence = x - core if (x != 20) else 0
+    elif(x<40): # pf-shell
+        core=20
+        valence = x - core if (x != 40) else 0
+    else:
+        raise ValueError(f'Shell above pf-shell not supported')
+
+    return valence, core
 
 #print(Z_to_nuc[32], Z_to_nuc.inverse['Ge'])
 #print(get_A_and_symbol('30Ge'))
